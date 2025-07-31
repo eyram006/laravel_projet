@@ -13,7 +13,9 @@ Route::middleware(["auth"])->prefix('/')->group(function () {
     ]);
 });
 
-Route::middleware(['auth', 'role:gestionnaire'])->group(function () {
+
+
+//Route::middleware(['auth', 'role:gestionnaire'])->group(function () {
                             //employeController
    Route::get('/employes', [EmployeController::class, 'index'])->name('employes.index');
 
@@ -21,7 +23,8 @@ Route::middleware(['auth', 'role:gestionnaire'])->group(function () {
    
     Route::put('/employes/{id}/update', [EmployeController::class, 'update'])->name('employes.update');
 
-    });
+Route::get('/employes-tableau', [EmployeController::class, 'index'])->name('employes.tableau');
+   // });
                                  //demandeController
     //  Route::get('/', [DemandeController::class, 'index'])->name('demandes.index');
 

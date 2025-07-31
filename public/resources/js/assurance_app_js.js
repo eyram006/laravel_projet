@@ -115,7 +115,6 @@ function updateRoleDisplay() {
     roleElement.textContent = roles[currentUserRole].name;
 }
 
-// Mettre à jour les permissions du menu
 function updateMenuPermissions() {
     const menuItems = document.querySelectorAll('[data-permission]');
     const userPermissions = roles[currentUserRole].permissions;
@@ -291,14 +290,18 @@ function getDashboardContent() {
 }
 
 function getAssuresContent() {
-    fetch('/employes-tableau')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('mainContent').innerHTML = html;
-        })
-        .catch(error => {
-            console.error('Erreur lors du chargement des employés :', error);
-        });
+    fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur serveur");
+                return response.text();
+            })
+            .then(html => {
+                document.querySelector('#content-area').innerHTML = html;
+            })
+            .catch(error => {
+                document.querySelector('#content-area').innerHTML = "<p class='text-danger'>Erreur de chargement</p>";
+                console.error(error);
+            });
 }
 
 function getDemandesContent() {

@@ -4,16 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Entreprise extends Model
 {
-     protected $fillable = ['nom', 'raison_social', 'address', 'user_id', 'token_public'];
+    use HasFactory;
+     protected $fillable = ['nom', 'raison_social', 'address', 'user_id', 'access_token'];
 
     // Génère automatiquement un token si vide
     protected static function booted()
     {
         static::creating(function ($entreprise) {
             if (empty($entreprise->access_token)) {
-                $entreprise->access_token = Str::uuid();
+                $entreprise->access_token = Str::random(5);
             }
         });
     }

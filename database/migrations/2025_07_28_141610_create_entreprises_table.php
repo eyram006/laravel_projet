@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('address')->nullable();
            // $table->unsignedInteger('user_id');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('entreprise_ access_token')->unique();
+            $table->string('access_token')->unique();
             $table->timestamps();
         });
     }

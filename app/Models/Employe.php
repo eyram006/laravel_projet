@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Employe extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'nom', 'prenoms', 'sexe', 'email', 'contact',
         'addresse', 'entreprise_id',
@@ -22,11 +24,6 @@ class Employe extends Model
         return $this->belongsTo(Entreprise::class);
     }
 
-    // public function entrepriseViaToken()
-    // {
-    //     return $this->belongsTo(Entreprise::class, 'entreprise_token_public', 'token_public');
-    // }
-
     public function user()
     {
          return $this->belongsTo(User::class);
@@ -39,6 +36,11 @@ class Employe extends Model
  public function Demande()
     {
         return $this->hasOne(Demande::class);
+}
+
+public function Carte()
+    {
+        return $this->hasOne(Carte::class);
 }
 
 }

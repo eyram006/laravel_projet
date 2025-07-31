@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->json('reponses');
             $table->foreignId('employe_id')->constrained('users')->onDelete('cascade');
-            $table->enum('statut', ['en attente', 'accepté', 'refusé'])->default('en attente');
+            $table->string('statut')->default('en attente');
             $table->timestamps();
         });
     }

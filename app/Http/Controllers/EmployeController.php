@@ -13,14 +13,12 @@ class EmployeController extends Controller
     public function index()
     {
         $employes =Employe ::orderBy('id')->paginate();
-        return view('dashboard',compact('employes'));
+        return view('employes.partials.tableau',compact('employes'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    
-
     /**
      * Display the specified resource.
      */

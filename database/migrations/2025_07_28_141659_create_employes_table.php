@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('addresse')->nullable();
             $table->string('entreprise_access_token');
             $table->foreignId('entreprise_id')->constrained('entreprises')->onDelete('cascade');
-            $table->foreign('entreprise_access_token')->references('remember_token')->on('entreprises')->onDelete('cascade');
+            $table->foreign('entreprise_access_token')->references('access_token')->on('entreprises')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->boolean('is_principal');
             $table->timestamps();

@@ -2,31 +2,42 @@
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - AssuranceApp</title>
 
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Remix Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        .btn-outline-primary:hover i,
+        .btn-outline-danger:hover i {
+            transform: scale(1.2);
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Remix Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    
+
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    
+
     <!-- CSS personnalisé -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="resources/css/style.css">
 
-     @vite('resources/css/style.css')
+    @vite('resources/css/style.css')
 
-     
+
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -53,7 +64,7 @@
     </header>
 
     <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar">
+    <nav class="sidebar" id="sidebar" x-data>
         <div class="sidebar-menu">
             <div class="menu-section">Tableau de bord</div>
             <a href="#" class="menu-item active" onclick="showView('dashboard')">
@@ -61,44 +72,55 @@
                 <span>Vue d'ensemble</span>
             </a>
 
-             {{-- tableau employe --}}
+            {{-- tableau employe --}}
+            {{-- <a href="{{ route('employes.index') }}" class="menu-item" onclick="showView('employes')" data-permission="manage_assures"> --}}
 
             @role('gestionnaire')
-            <div class="menu-section">Gestion</div>
-            <a href="{{ route('employes.index') }}" class="menu-item" onclick="showView('employes')" data-permission="manage_assures">
-                <i class="fas fa-users"></i>
-                <span>Gestion des employés</span>
-            </a>
+                <div class="menu-section">Gestion</div>
+                <a href="#" class="menu-item" @click.prevent="fetchContent('{{ route('employes.index') }}')" >
+                    {{-- <a href="{{ route('employes.index') }}" class="menu-item" onclick="showView('employes')" data-permission="manage_assures"> --}}
+                    <i class="fas fa-users"></i>
+                    <span>Gestion des employés 👨‍💼</span>
+                </a>
+                {{-- <div id="main-content" class="container-fluid mt-4"></div> --}}
             @endrole
 
-              {{-- tableau demandes --}}
-            <a href="#" class="menu-item" onclick="showView('demandes')" data-permission="manage_claims">
+            @role('gestionnaire','employe')
+            {{-- tableau demandes --}}
+            <a href="#" class="menu-item" onclick="showView('demandes')" >
                 <i class="fas fa-file-alt"></i>
                 <span>Gestion des demandes</span>
             </a>
-            
-            <a href="#" class="menu-item" onclick="showView('polices')" data-permission="manage_policies">
+             @endrole
+
+            @role('gestionnaire')
+            <a href="#" class="menu-item" onclick="showView('polices')" >
                 <i class="fas fa-file-contract"></i>
                 <span>Gestion des polices</span>
             </a>
-            
-            <a href="#" class="menu-item" onclick="showView('gestionnaires')" data-permission="manage_users">
+             @endrole
+
+            @role('admin')
+            <a href="#" class="menu-item" onclick="showView('gestionnaires')" >
                 <i class="fas fa-user-tie"></i>
                 <span>Gestion des gestionnaires</span>
             </a>
+            @endrole
 
+            @role('admin')
             {{-- tableau User --}}
-            
             <div class="menu-section">Administration</div>
             <a href="#" class="menu-item" onclick="showView('logs')" data-permission="view_logs">
                 <i class="fas fa-list-alt"></i>
                 <span>Gestion des logs</span>
             </a>
-            
+
             <a href="#" class="menu-item" onclick="showView('settings')" data-permission="manage_settings">
                 <i class="fas fa-cog"></i>
                 <span>Paramètres</span>
             </a>
+
+             @endrole
 
             <div class="menu-section">Compte</div>
             <a href="{{ route('logout') }}  " class="menu-item" onclick="logout()">
@@ -112,7 +134,7 @@
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
     <!-- Main Content -->
-    <main class="main-content" id="mainContent">
+    <main class="main-content" id="cc">
         <div id="content-area">
             <!-- Le contenu sera chargé ici dynamiquement -->
         </div>
@@ -121,7 +143,7 @@
     <!-- Boutons de test pour démonstration -->
     <div class="role-test-buttons">
         <div class="dropdown">
-           
+
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#" onclick="changeRole('admin')">Administrateur</a></li>
                 <li><a class="dropdown-item" href="#" onclick="changeRole('manager')">Gestionnaire</a></li>
@@ -184,15 +206,18 @@
                             <label class="form-label">Mot de passe temporaire *</label>
                             <div class="input-group">
                                 <input type="password" class="form-control" id="userPassword" required>
-                                <button class="btn btn-outline-secondary" type="button" onclick="generatePassword()">
+                                <button class="btn btn-outline-secondary" type="button"
+                                    onclick="generatePassword()">
                                     <i class="fas fa-key"></i> Générer
                                 </button>
                             </div>
-                            <div class="form-text">L'utilisateur devra changer ce mot de passe à sa première connexion</div>
+                            <div class="form-text">L'utilisateur devra changer ce mot de passe à sa première connexion
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Département</label>
-                            <input type="text" class="form-control" id="userDepartment" placeholder="Ex: Sinistres, Commercial, Support...">
+                            <input type="text" class="form-control" id="userDepartment"
+                                placeholder="Ex: Sinistres, Commercial, Support...">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Notes</label>
@@ -210,10 +235,15 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Bootstrap JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- JavaScript personnalisé -->
-    <script src="assurance_app_js.js"></script>
+    <script src="{{ asset('resources/js/assurance_app_js.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
 </body>
+
 </html>

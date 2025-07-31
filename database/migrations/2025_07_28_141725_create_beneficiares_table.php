@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('beneficiares', function (Blueprint $table) {
             $table->id();
             $table->string('url_justificatif ');
-            $table->enum('type_benificiare', ['enfant', 'conjoint(e)']);
+            $table->string('type_beneficiaire')->default('enfant');
             $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
