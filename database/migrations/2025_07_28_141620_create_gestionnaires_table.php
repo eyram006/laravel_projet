@@ -11,23 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('demandes', function (Blueprint $table) {
+        Schema::create('gestionnaires', function (Blueprint $table) {
             $table->id();
-            $table->json('reponses');
-            $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade');
-            $table->string('statut')->default('en attente');
-            $table->foreignId('gestionnaire_id')->constrained('gestionnaires')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('nom');
+            $table->string('prenom');
+            $table->char('sexe', 1);
             $table->timestamps();
         });
     }
-
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('demandes');
+        Schema::dropIfExists('gestionnaires');
     }
 };

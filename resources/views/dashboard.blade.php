@@ -62,9 +62,14 @@
             </div>
         </div>
     </header>
-
+  
     <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar" x-data>
+    <nav class="sidebar" id="sidebar" x-data="{ fetchContent(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => document.getElementById('content-area').innerHTML = html)
+        .catch(error => console.error(error));
+}}">
         <div class="sidebar-menu">
             <div class="menu-section">Tableau de bord</div>
             <a href="#" class="menu-item active" onclick="showView('dashboard')">
@@ -73,39 +78,39 @@
             </a>
 
             {{-- tableau employe --}}
-            {{-- <a href="{{ route('employes.index') }}" class="menu-item" onclick="showView('employes')" data-permission="manage_assures"> --}}
 
             @role('gestionnaire')
                 <div class="menu-section">Gestion</div>
                 <a href="#" class="menu-item" @click.prevent="fetchContent('{{ route('employes.index') }}')" >
                     {{-- <a href="{{ route('employes.index') }}" class="menu-item" onclick="showView('employes')" data-permission="manage_assures"> --}}
                     <i class="fas fa-users"></i>
-                    <span>Gestion des employés 👨‍💼</span>
+                    <span>Gestion des employés </span>
                 </a>
-                {{-- <div id="main-content" class="container-fluid mt-4"></div> --}}
-            @endrole
+               @endrole
 
-            @role('gestionnaire','employe')
-            {{-- tableau demandes --}}
-            <a href="#" class="menu-item" onclick="showView('demandes')" >
+                    {{-- tableau demandes --}}
+             @hasanyrole('employe|gestionnaire')
+            <a href="#" class="menu-item" @click.prevent="fetchContent('{{ route('demandes.index') }}')" >
                 <i class="fas fa-file-alt"></i>
-                <span>Gestion des demandes</span>
+                <span>Gestion des demandes </span>
             </a>
-             @endrole
+           @endhasanyrole
+             
 
-            @role('gestionnaire')
+            {{-- @role('gestionnaire')
             <a href="#" class="menu-item" onclick="showView('polices')" >
                 <i class="fas fa-file-contract"></i>
-                <span>Gestion des polices</span>
+                <span>Gestion des contrats </span>
             </a>
-             @endrole
-
-            @role('admin')
-            <a href="#" class="menu-item" onclick="showView('gestionnaires')" >
+             @endrole --}}
+                        {{-- tableau gestionnaires() --}}
+            {{-- @role('admin') --}}
+             @hasanyrole('employe|gestionnaire')
+            <a href="#" class="menu-item" @click.prevent="fetchContent('{{ route('gestionnaires.index') }}')" >
                 <i class="fas fa-user-tie"></i>
-                <span>Gestion des gestionnaires</span>
+                <span>Gestion des gestionnaires </span>
             </a>
-            @endrole
+             @endhasanyrole
 
             @role('admin')
             {{-- tableau User --}}
@@ -114,13 +119,12 @@
                 <i class="fas fa-list-alt"></i>
                 <span>Gestion des logs</span>
             </a>
+             @endrole
 
             <a href="#" class="menu-item" onclick="showView('settings')" data-permission="manage_settings">
                 <i class="fas fa-cog"></i>
                 <span>Paramètres</span>
             </a>
-
-             @endrole
 
             <div class="menu-section">Compte</div>
             <a href="{{ route('logout') }}  " class="menu-item" onclick="logout()">
@@ -134,6 +138,10 @@
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
     <!-- Main Content -->
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
     <main class="main-content" id="cc">
         <div id="content-area">
             <!-- Le contenu sera chargé ici dynamiquement -->

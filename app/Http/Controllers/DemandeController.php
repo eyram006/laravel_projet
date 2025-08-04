@@ -12,17 +12,19 @@ class DemandeController extends Controller
      */
     public function index()
     {
-        $demandes =Demande ::orderBy('id')->paginate();
-        return view('dashboard',compact('demandes'));
+        $demandes = Demande::with('employe')->paginate();
+        return view('demandes.tableau_demande',compact('demandes'));
     
     }
+
+    
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('');
     }
 
     /**

@@ -78,7 +78,10 @@ $this->call([
         //  RoleSeeder::class,
         //  UserSeeder::class,
         //  EntrepriseSeeder::class,
-         EmployeSeeder::class
+        //  EmployeSeeder::class,
+        //GestionnaireSeeder::class,
+        // DemandeSeeder::class,
+        
       ]);
 
 

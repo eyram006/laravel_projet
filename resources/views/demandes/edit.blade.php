@@ -3,18 +3,18 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Modifier l'employé</title>
+    <title>Modifier demande</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f88282e1;
+            background-color: #f8f9fa;
             padding: 40px 0;
         }
 
         .card {
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(93, 3, 3, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .form-label {
@@ -29,7 +29,7 @@
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-8">
                 <div class="card bg-white">
-                    <h2 class="text-center mb-4">Modifier l'employe</h2>
+                    <h2 class="text-center mb-4">Modifier la demande</h2>
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -41,32 +41,20 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('employes.update', $employe->id) }}">
+                    <form method="POST" action="{{ route('demandes.update', $user->id) }}">
                         @csrf
                         @method('PUT')
 
                         <div class="mb-4">
                             <label for="name" class="form-label">Nom</label>
                             <input type="text" class="form-control form-control-lg" name="name" id="name"
-                                value="{{ old('name', $employe->name) }}" >
-                        </div>
-
-                         <div class="mb-4">
-                            <label for="prenom" class="form-label">Prenom</label>
-                            <input type="text" class="form-control form-control-lg" name="prenom" id="prenom"
-                                value="{{ old('prenom', $employe->prenom) }}" >
+                                value="{{ old('name', $user->name) }}" required>
                         </div>
 
                         <div class="mb-4">
                             <label for="email" class="form-label">Adresse Email</label>
                             <input type="email" class="form-control form-control-lg" name="email" id="email"
-                                value="{{ old('email', $employe->email) }}" >
-                        </div>
-
-                         <div class="mb-4">
-                            <label for="entreprise" class="form-label">entreprise</label>
-                            <input type="text" class="form-control form-control-lg" name="entreprise" id="entreprise"
-                                value="{{ old('entreprise', $employe->entreprise->raison_social) }}" required>
+                                value="{{ old('email', $user->email) }}" required>
                         </div>
 
 

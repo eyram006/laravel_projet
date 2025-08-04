@@ -63,7 +63,12 @@ class User extends Authenticatable
 
     public function beneficiaires()
     {
-        return $this->hasMany(Beneficiare::class);
+        return $this->hasOne(Beneficiare::class);
+    }
+
+    public function gestionnaires()
+    {
+        return $this->hasOne(Gestionnaire::class);
     }
 
 }

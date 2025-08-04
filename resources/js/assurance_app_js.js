@@ -290,14 +290,19 @@ function getDashboardContent() {
     `;
 }
 
-function getAssuresContent() {
-    fetch('/employes-tableau')
-        .then(response => response.text())
+function fetchContent(url) {
+   fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur HTTP : ' + response.status);
+            }
+            return response.text();
+        })
         .then(html => {
             document.getElementById('mainContent').innerHTML = html;
         })
         .catch(error => {
-            console.error('Erreur lors du chargement des employés :', error);
+            console.error('Erreur lors du chargement du contenu :', error);
         });
 }
 

@@ -13,6 +13,8 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user()->load('roles');
+        // $role = $user->getRoleNames()->first();
+        
         return view('dashboard', compact('user'));
 
     }

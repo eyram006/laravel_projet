@@ -289,20 +289,17 @@ function getDashboardContent() {
     `;
 }
 
-function getAssuresContent() {
-    fetch(url)
-            .then(response => {
-                if (!response.ok) throw new Error("Erreur serveur");
-                return response.text();
-            })
-            .then(html => {
-                document.querySelector('#content-area').innerHTML = html;
-            })
-            .catch(error => {
-                document.querySelector('#content-area').innerHTML = "<p class='text-danger'>Erreur de chargement</p>";
-                console.error(error);
-            });
-}
+// window.fetchContentContent = function(url) {
+//     fetch(url)
+//         .then(response => {
+//             if (!response.ok) throw new Error('Erreur HTTP : ' + response.status);
+//             return response.text();
+//         })
+//         .then(html => {
+//             document.getElementById('content-area').innerHTML = html;
+//         })
+//         .catch(error => console.error('Erreur lors du chargement du contenu :', error));
+// };
 
 function getDemandesContent() {
     return `

@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employe;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+
 
 class EmployeController extends Controller
 {
@@ -41,15 +46,22 @@ class EmployeController extends Controller
      */
     public function update(Request $request,$id)
     {
-          $employe = Employe::findOrFail($id);
+        
+        $employe = Employe::findOrFail($id);
         $validated = $request->validate([
-            'name' => 'sometimes|max:255',
-            'email' => "sometimes|email|unique:users,email,{$employe->id}",
+            'nom' => 'sometimes|max:255',
+            'prenoms'=> 'sometimes|max:250',
+            'email' => "sometimes|email|unique:users,email,{$employe->user_id}",
+            'sexe' => 'sometimes|in:M,F',
         ]);
 
+          $employe->nom = $validated['nom'] ?? $employe->nom;
+    $employe->prenoms = $validated['prenoms  '] ?? $employe->prenoms;
+    $employe->sexe = $validated['sexe'] ?? $employe->sexe;
+    $employe->save();
         $employe->update($validated);
 
-        return redirect()->route('employes.index')->with('success', 'employe mis à jour.');
+        return redirect()->route('dashboard')->with('success', 'employe mis à jour.');
     }
 
     /**
@@ -67,7 +79,7 @@ class EmployeController extends Controller
 
 public function create()
     {
-        //
+      // return view('employes.create');
     }
 
     /**
@@ -75,7 +87,38 @@ public function create()
      */
     public function store(Request $request)
     {
-        //
+        
+        $validated = $request->validate([
+        'nom' => 'required|string|max:255',
+        'prenoms' => 'required|string|max:255',
+        'raison_sociale' => 'required|exists:entreprises,raison_sociale',
+        'email' => 'required|email|unique:users,email',
+    ]); 
+      // Recherche de l'entreprise par raison sociale
+   
+
+     $employe = Employe::create($validated);
+
+     
+    // Génération du mot de passe temporaire
+    // $plainPassword = Str::random(10);
+
+    //  $user = User::create([
+    //     'name' => $validated['nom'] . ' ' . $validated['prenom'],
+    //     'email' => $validated['email'],
+    //     'password' => Hash::make($plainPassword),
+    // ]);
+
+    // // Attribution du rôle 'employe'
+    // $user->assignRole('employe');
+
+    //  Mail::raw("Bienvenue ! Voici votre mot de passe temporaire : $plainPassword", function ($message) use ($user) {
+    //     $message->to($user->email)
+    //             ->subject('Accès à votre compte employé');
+    // });
+
+    return redirect()->route('dashboard')->with('success', 'Employé créé avec succès.');
+        
     }
 
 
