@@ -20,6 +20,12 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('contact')->nullable()->unique();
             $table->string('addresse')->nullable();
+
+            // Ajout des champs fusionnés depuis gestionnaires
+            $table->string('nom')->nullable();
+            $table->string('prenom')->nullable();
+            $table->char('sexe', 1)->nullable();
+
             $table->timestamps();
         });
 
@@ -37,6 +43,8 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        // La table gestionnaires n'est plus créée : supprimer la migration existante !
     }
 
     /**
@@ -47,5 +55,7 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+
+        // gestionnaires supprimée, pas besoin de la drop ici
     }
 };

@@ -45,14 +45,28 @@ class GestionnaireController extends Controller
        
     ]);
 
-    Gestionnaire::create($validated);
+    $plainPassword = Str::random(10);
+ $user = User::create([
+            'name' => $validated['nom'] . ' ' . $validated['prenom'],
+            'email' => $validated['email'],
+            'password' => Hash::make($plainPassword),
+        ]);
+
+        // Attribution du rôle "gestionnaire"
+        $user->assignRole('gestionnaire');
+
+    Gestionnaire::create(['nom' => $validated['nom'],
+            'prenom' => $validated['prenom'],
+            'sexe' => $validated['sexe'],
+            'user_id' => $user->id,
+        ]);
    
-        // Mail::raw("Bienvenue ! Voici votre mot de passe temporaire : $plainPassword", function ($message) use ($user) {
-        // $message->to($user->email)
-        //         ->subject('Accès à votre compte gestionnaire');
-    // });
+        Mail::raw("Bienvenue ! Voici votre mot de passe temporaire : $plainPassword", function ($message) use ($user) {
+        $message->to($user->email)
+                ->subject('Accès à votre compte gestionnaire');
+    });
    
-       return redirect()->route('dashboard.index')->with('success', 'Gestionnaire ajouté avec succès.');
+      return redirect()->route('dashboard.index')->with('success', 'Gestionnaire ajouté avec succès.');
    }
 
     /**
@@ -83,6 +97,7 @@ class GestionnaireController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         $gestionnaire = Gestionnaire::findOrFail($id);
          $validated = $request->validate([
         'nom' => 'sometimes|string|max:255',
@@ -93,11 +108,21 @@ class GestionnaireController extends Controller
     // Mise à jour
     $gestionnaire->update($validated);
 
-    
-   // return redirect()->back();
-   return redirect()->route('dashboard.index');
+    dd($validated["email"]);
+    if ($gestionnaire->user) {
+            $gestionnaire->user->update([
+                'name' => ($validated['nom'] ?? $gestionnaire->nom) . ' ' . ($validated['prenom'] ?? $gestionnaire->prenom),
+                'email' => $validated['email'] ?? $gestionnaire->user->email,
+            ]);
+        }
 
+    
+        return redirect()->back()->with('error', $e->getMessage());
     }
+   // return redirect()->back();
+//    return redirect()->route('dashboard.index');
+
+    
 
     /**
      * Remove the specified resource from storage.

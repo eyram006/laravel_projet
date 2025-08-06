@@ -11,7 +11,7 @@ class Gestionnaire extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nom','prenom','sexe'
+        'nom','prenom','sexe','user_id',
     ];
 
     public function Demande()

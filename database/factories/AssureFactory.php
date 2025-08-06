@@ -2,17 +2,18 @@
 
 namespace Database\Factories;
 
+// use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Employe;
+use App\Models\Assure;
 use App\Models\User;
-use App\Models\Entreprise;
+use App\Models\Client;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employe>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Assure>
  */
-class EmployeFactory extends Factory
+class AssureFactory extends Factory
 {
-    protected $model = Employe::class;
+    protected $model = Assure::class;
     /**
      * Define the model's default state.
      *
@@ -29,10 +30,11 @@ class EmployeFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'contact' => $this->faker->unique()->phoneNumber,
             'addresse' => $this->faker->address,
-            'entreprise_id' => Entreprise::inRandomOrder()->value('id'),
-            'entreprise_access_token' => Entreprise::inRandomOrder()->value('access_token'),
+            'client_id' => Client::inRandomOrder()->value('id'),
+            'client_access_token' => Client::inRandomOrder()->value('access_token'),
             'user_id' => User::inRandomOrder()->value('id'), 
             'is_principal' => $this->faker->boolean(30),
+            
         ];
     }
 }

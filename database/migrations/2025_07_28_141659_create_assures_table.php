@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employes', function (Blueprint $table) {
+        Schema::create('assures', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
             $table->string('prenoms');
@@ -19,9 +19,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('contact')->unique();
             $table->string('addresse')->nullable();
-            $table->string('entreprise_access_token');
-            $table->foreignId('entreprise_id')->constrained('entreprises')->onDelete('cascade');
-            $table->foreign('entreprise_access_token')->references('access_token')->on('entreprises')->onDelete('cascade');
+            $table->string('client_access_token');
+            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->string('statut')->default('en attente');
+            $table->string('anciennete')->nullable();
+            $table->dateTime('date_naissance')->nullable();
+            $table->foreign('client_access_token')->references('access_token')->on('clients')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->boolean('is_principal');
             $table->timestamps();

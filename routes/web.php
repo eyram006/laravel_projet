@@ -53,7 +53,7 @@ Route::put('/gestionnaires/{id}', [GestionnaireController::class, 'update'])->na
 
 Route::get('/gestionnaires/{id}/show', [GestionnaireController::class, 'show'])->name('gestionnaires.show');
 
-Route::get('/gestionnaires/create', [GestionnaireController::class, 'create'])->name('gestionnaires.create');
+//Route::get('/gestionnaires/create', [GestionnaireController::class, 'create'])->name('gestionnaires.create');
 
 Route::post('/gestionnaires', [GestionnaireController::class, 'store'])->name('gestionnaires.store');
 

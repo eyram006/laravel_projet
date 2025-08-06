@@ -5,13 +5,13 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\User;
-use App\Models\Entreprise;
+use App\Models\Client;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Entreprise>
  */
-class EntrepriseFactory extends Factory
+class ClientFactory extends Factory
 {
-    protected $model = Entreprise::class;
+    protected $model = Client::class;
     /**
      * Define the model's default state.
      *

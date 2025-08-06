@@ -59,6 +59,9 @@
                         <a href="{{ route('demandes.show', $demande) }}" class="btn btn-sm btn-outline-primary rounded-pill">
                             <i class="ri-eye-line"></i>
                         </a>
+
+
+                        
                     </td>
                 </tr>
             @empty

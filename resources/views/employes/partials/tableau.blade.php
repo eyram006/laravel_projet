@@ -15,8 +15,7 @@
                  </a> --}}
 
                  <a href="#" class="btn btn-sm btn-outline-primary rounded-pill" title="ajouter"
-                     data-bs-toggle="modal" 
-                     data-bs-target="#createEmployeModal">
+                     data-bs-toggle="modal" data-bs-target="#createEmployeModal">
                      <i class="ri-user-add-line"></i>
                      Ajouter
                  </a>
@@ -39,18 +38,21 @@
                                      <div class="mb-4">
                                          <label for="nom" class="form-label">Nom</label>
                                          <input type="text" class="form-control form-control-lg" name="nom"
-                                             id="nom" value="{{ old('nom') }}" required>
+                                             id="nom_create" placeholder="Entrer le nom" value="{{ old('nom') }}"
+                                             required>
                                      </div>
 
                                      <div class="mb-4">
                                          <label for="prenoms" class="form-label">Prénoms</label>
                                          <input type="text" class="form-control form-control-lg" name="prenoms"
-                                             id="prenoms" value="{{ old('prenoms') }}" required>
+                                             id="prenoms_create" placeholder="Entrer les prénoms"
+                                             value="{{ old('prenoms') }}" required>
                                      </div>
 
                                      <div class="mb-3">
-                                         <label for="email">Adresse email</label>
-                                         <input type="email" name="email" class="form-control" required>
+                                         <label for="email_create" class="form-label">Adresse email</label>
+                                         <input type="email" name="email" class="form-control" id="email_create"
+                                             required>
                                      </div>
 
                                      <div class="mb-4">
@@ -62,22 +64,59 @@
                                              </option>
                                              <option value="F" {{ old('sexe') == 'F' ? 'selected' : '' }}>Féminin
                                              </option>
-                                         </select> 
-                                     </div> 
+                                         </select>
+                                     </div>
+
+                                     <div class="mb-4">
+                                         <label for="contact" class="form-label">Contact</label>
+                                         <input type="text" name="contact" id="contact"
+                                             class="form-control form-control-lg"
+                                             placeholder="Entrer le contact(+228 12345677)"
+                                             value="{{ old('contact') }}">
+                                     </div>
+
+                                     <div class="mb-4">
+                                         <label for="addresse" class="form-label">Adresse</label>
+                                         <input type="text" name="addresse" id="addresse"
+                                             class="form-control form-control-lg"
+                                             placeholder="Entrer la ville de residence" value="{{ old('addresse') }}">
+                                     </div>
+                                     <div class="mb-4">
+                                         <label for="entreprise_id" class="form-label">Entreprise</label>
+                                         <select name="entreprise_id" id="entreprise_id"
+                                             class="form-select form-select-lg" required>
+                                             <option value="">-- Sélectionnez l'entreprise correspondante--
+                                             </option>
+                                             @foreach ($entreprises as $entreprise)
+                                                 <option value="{{ $entreprise->id }}"
+                                                     {{ old('entreprise_id') == $entreprise->id ? 'selected' : '' }}>
+                                                     {{ $entreprise->raison_social }}
+                                                 </option>
+                                             @endforeach
+                                         </select>
+                                     </div>
+
+                                     <div class="mb-4 form-check">
+                                         <input type="checkbox" name="is_principal" id="is_principal"
+                                             class="form-check-input" value="1"
+                                             {{ old('is_principal') ? 'checked' : '' }}>
+                                         <label for="is_principal" class="form-check-label">Assuré principal</label>
+                                     </div>
+                                     {{-- </div> --}}
 
                                      <div class="modal-footer">
                                          <div class="d-flex justify-content-between">
-                                             <a class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">
-                                                 Annuler </a>
-                                             <button type="submit" class="btn btn-primary btn-lg">
-                                                 ajouter </button>
+                                             <button type="button" class="btn btn-outline-secondary btn-lg"
+                                                 data-bs-dismiss="modal">Annuler</button>
+                                             <button type="submit" class="btn btn-primary btn-lg">Ajouter</button>
                                          </div>
                                      </div>
+
                              </form>
                          </div>
                      </div>
                  </div>
- </div>  
+             </div>
          </div>
          <div class="card-body">
              <div class="d-flex justify-content-between align-items-center mb-3 gap-3">
@@ -99,7 +138,7 @@
                              <th>Prénom</th>
                              <th>Email</th>
                              <th>Entreprise</th>
-                             {{-- <th>Statut</th> --}}
+
                              <th>Actions</th>
                          </tr>
                      </thead>
@@ -109,7 +148,7 @@
                                  <td>{{ $employe->nom }}</td>
                                  <td>{{ $employe->prenoms }}</td>
                                  <td>{{ $employe->email }}</td>
-                                 <td>{{ $employe->entreprise->raison_social }}</td>
+                                 <td>{{ $employe->entreprise->raison_social ?? 'Non assigné' }}</td>
                                  {{-- <td><span class="badge bg-success">Actif</span></td> --}}
                                  <td>
                                      <div class="d-flex justify-content-center gap-3">
@@ -122,7 +161,8 @@
                                          {{-- formulaire edit --}}
 
                                          <div class="modal fade" id="editEmployeModal{{ $employe->id }}"
-                                             tabindex="-1" aria-labelledby="editEmployeModalLabel{{ $employe->id }}"
+                                             tabindex="-1"
+                                             aria-labelledby="editEmployeModalLabel{{ $employe->id }}"
                                              aria-hidden="true">
                                              <div class="modal-dialog">
                                                  <div class="modal-content">
@@ -155,6 +195,7 @@
                                                                  <input type="text"
                                                                      class="form-control form-control-lg"
                                                                      name="nom" id="nom"
+                                                                     placeholder="Entrer le nom"
                                                                      value="{{ old('nom', $employe->nom) }}">
                                                              </div>
 
@@ -164,6 +205,7 @@
                                                                  <input type="text"
                                                                      class="form-control form-control-lg"
                                                                      name="prenoms" id="prenoms"
+                                                                     placeholder="Entrer les prénoms"
                                                                      value="{{ old('prenoms', $employe->prenoms) }}">
                                                              </div>
 
@@ -173,6 +215,7 @@
                                                                  <input type="email"
                                                                      class="form-control form-control-lg"
                                                                      name="email" id="email"
+                                                                     placeholder="Entrer l'email"
                                                                      value="{{ old('email', $employe->email) }}">
                                                              </div>
 
@@ -188,6 +231,51 @@
                                                                          Féminin</option>
                                                                  </select>
                                                              </div>
+
+                                                             <div class="mb-4">
+                                                                 <label for="contact"
+                                                                     class="form-label">Contact</label>
+                                                                 <input type="text" name="contact"
+                                                                     id="contact_edit"
+                                                                     class="form-control form-control-lg"
+                                                                     placeholder="Entrer le contact"
+                                                                     value="{{ old('contact', $employe->contact) }}">
+                                                             </div>
+                                                             <div class="mb-4">
+                                                                 <label for="addresse"
+                                                                     class="form-label">ville</label>
+                                                                 <input type="text" name="addresse"
+                                                                     id="addresse_edit"
+                                                                     class="form-control form-control-lg"
+                                                                     placeholder="Entrer la ville"
+                                                                     value="{{ old('addresse', $employe->addresse) }}">
+                                                             </div>
+
+                                                             <div class="mb-4">
+                                                                 <label for="entreprise_id"
+                                                                     class="form-label">Entreprise</label>
+                                                                 <select name="entreprise_id" id="entreprise_id"
+                                                                     class="form-select form-select-lg" required>
+                                                                     <option value=""> Sélectionnez l'entreprise
+                                                                         --</option>
+                                                                     @foreach ($entreprises as $entreprise)
+                                                                         <option value="{{ $entreprise->id }}"
+                                                                             {{ old('entreprise_id', $employe->entreprise_id ?? '') == $entreprise->id ? 'selected' : '' }}>
+                                                                             {{ $entreprise->raison_social }}
+                                                                         </option>
+                                                                     @endforeach
+                                                                 </select>
+                                                             </div>
+
+                                                             <div class="mb-4 form-check">
+                                                                 <input type="checkbox" name="is_principal"
+                                                                     id="is_principal_edit" class="form-check-input"
+                                                                     value="1"
+                                                                     {{ old('is_principal', $employe->is_principal) ? 'checked' : '' }}>
+                                                                 <label for="is_principal_edit"
+                                                                     class="form-check-label">assure principal</label>
+                                                             </div>
+
                                                          </div>
 
                                                          <div class="modal-footer">
@@ -196,7 +284,7 @@
                                                                      data-bs-dismiss="modal"> Annuler </a>
                                                                  <button type="submit"
                                                                      class="btn btn-primary btn-lg">
-                                                                     Mettre à jour </button>
+                                                                     Enregistrer </button>
                                                              </div>
                                                      </form>
                                                  </div>
@@ -215,7 +303,7 @@
                                              title="Supprimer">
                                              <i class="ri-delete-bin-line"></i>
                                          </button>
-                                     
+
              </div>
              </form>
              </td>
@@ -236,7 +324,7 @@
      </div>
      {{-- </div>
  </div> --}}
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     <!-- Bootstrap JS -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
  </body>

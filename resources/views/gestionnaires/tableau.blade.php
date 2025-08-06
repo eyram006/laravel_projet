@@ -29,11 +29,66 @@
                 <h4 class="mb-0">🧑‍💼 Liste des gestionnaires</h4>
                 <small class="text-muted">Gérer les informations des gestionnaires</small>
             </div>
-            <a href="{{ route('gestionnaires.create') }}"
-                class="btn btn-primary rounded-pill d-flex align-items-center gap-1">
-                <i class="ri-user-add-line"></i>
-                Ajouter
-            </a>
+            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill" title="ajouter"
+   data-bs-toggle="modal" data-bs-target="#createGestionnaireModal">
+   <i class="ri-user-add-line"></i>
+   Ajouter
+</a>
+
+<div class="modal fade" id="createGestionnaireModal" tabindex="-1"
+    aria-labelledby="createGestionnaireModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ route('gestionnaires.store') }}">
+                @csrf
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createGestionnaireModalLabel">
+                        Créer un nouveau gestionnaire</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-4">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input type="text" class="form-control form-control-lg" name="nom"
+                            id="nom_create" placeholder="Entrer le nom" value="{{ old('nom') }}"
+                            required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="prenom" class="form-label">Prénom</label>
+                        <input type="text" class="form-control form-control-lg" name="prenom"
+                            id="prenom_create" placeholder="Entrer le prénom"
+                            value="{{ old('prenom') }}" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="sexe" class="form-label">Sexe</label>
+                        <select name="sexe" id="sexe" class="form-select form-select-lg" required>
+                            <option value="">-- Sélectionnez --</option>
+                            <option value="M" {{ old('sexe') == 'M' ? 'selected' : '' }}>Masculin</option>
+                            <option value="F" {{ old('sexe') == 'F' ? 'selected' : '' }}>Féminin</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-outline-secondary btn-lg"
+                            data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Ajouter</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
         </div>
 
         <div class="card-body">
