@@ -21,7 +21,7 @@ class AssureFactory extends Factory
      */
     public function definition(): array
     {
-        
+        $client = Client::inRandomOrder()->first();
 
         return [
            'nom' => $this->faker->lastName,
@@ -29,12 +29,13 @@ class AssureFactory extends Factory
             'sexe' => $this->faker->randomElement(['M', 'F']),
             'email' => $this->faker->unique()->safeEmail,
             'contact' => $this->faker->unique()->phoneNumber,
-            'addresse' => $this->faker->address,
-            'client_id' => Client::inRandomOrder()->value('id'),
-            'client_access_token' => Client::inRandomOrder()->value('access_token'),
+            'addresse' => $this->faker->city,
+            'client_id' =>$client->id,
+            'client_access_token' => $client->access_token,
             'user_id' => User::inRandomOrder()->value('id'), 
-            'is_principal' => $this->faker->boolean(30),
-            
+            'is_principal' => $this->faker->boolean(100),
+            'date_naissance'=>$this->faker->date(),
+            'anciennete'=>$this->faker->numberBetween(0, 50) . ' ans',
         ];
     }
 }

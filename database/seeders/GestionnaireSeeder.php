@@ -14,14 +14,15 @@ class GestionnaireSeeder extends Seeder
      */
     public function run(): void
     {
-        Gestionnaire::create([
-                 'nom' => 'Doe',
-                 'prenom' => 'Yasmine',
-                'sexe' => 'F',
-                'user_id' => User::where('email', 'yasmine@gmail.com')->first()->id,
+        // Gestionnaire::create([
+        //          'nom' => 'Doe',
+        //          'prenom' => 'Yasmine',
+        //          'email'=> 'tal@gmail.com',
+        //         'sexe' => 'F',
+        //         'user_id' => User::where('email', 'tal@gmail.com')->first()->id,
 
-        ]);
+        // ]);
 
-         Gestionnaire::factory()->count(3)->create();
+         Gestionnaire::factory()->count(5)->create();
     }
 }

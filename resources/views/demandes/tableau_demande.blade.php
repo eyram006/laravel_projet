@@ -4,7 +4,7 @@
         <div class="card-header bg-white d-flex justify-content-between align-items-center rounded-top-4">
             <div>
                 <h4 class="mb-0">📄 Liste des demandes</h4>
-                <small class="text-muted">Gérer les demandes envoyées par les employés</small>
+                <small class="text-muted">Gérer les demandes envoyées par les assurés</small>
             </div>
         </div>
 
@@ -33,8 +33,8 @@
     <table class="table table-hover align-middle text-center">
         <thead class="table-light text-capitalize">
             <tr>
-                <th>Nom de l'employé</th>
-                <th>Prénom de l'employé</th>
+                <th>Nom de l'assuré</th>
+                <th>Prénom de l'assuré</th>
                 <th>Statut</th>
                 <th>Actions</th>
             </tr>
@@ -42,8 +42,8 @@
         <tbody>
             @forelse ($demandes as $demande)
                 <tr>
-                    <td>{{ $demande->employe->nom ?? 'Non défini' }}</td>
-                    <td>{{ $demande->employe->prenom ?? 'Non défini' }}</td>
+                    <td>{{ $demande->assure->nom ?? 'Non défini' }}</td>
+                    <td>{{ $demande->assure->prenoms ?? 'Non défini' }}</td>
                     <td>
                         @php
                             $badge = match ($demande->statut->value) {

@@ -41,11 +41,14 @@ class GestionnaireController extends Controller
         'nom' => 'required|string|max:255',
         'prenom' => 'required|string|max:255',
         'sexe' => 'required|in:M,F',
-        'email' => 'required|email',
+        'email' => 'required|email|unique:users,email',
        
     ]);
+     
+ $plainPassword = Str::random(10);
 
-    $plainPassword = Str::random(10);
+   
+    $mp=$plainPassword;
  $user = User::create([
             'name' => $validated['nom'] . ' ' . $validated['prenom'],
             'email' => $validated['email'],
@@ -61,10 +64,17 @@ class GestionnaireController extends Controller
             'user_id' => $user->id,
         ]);
    
-        Mail::raw("Bienvenue ! Voici votre mot de passe temporaire : $plainPassword", function ($message) use ($user) {
-        $message->to($user->email)
-                ->subject('Accès à votre compte gestionnaire');
-    });
+        // Mail::raw("Bienvenue ! Voici votre mot de passe temporaire : $plainPassword\n\n", function ($message) use ($user) {
+        // $message->to($user->email)
+        //         ->subject('Accès à votre compte gestionnaire');
+
+        Mail::raw(
+        "Bienvenue sur l'application !\n\nVoici vos accès :\nEmail : {$user->email}\nMot de passe temporaire : $plainPassword\n\nVeuillez le changer dès votre première connexion.",
+        function ($message) use ($user) {
+            $message->to($user->email)
+                    ->subject('Accès à votre compte gestionnaire');
+        }
+    );
    
       return redirect()->route('dashboard.index')->with('success', 'Gestionnaire ajouté avec succès.');
    }
@@ -99,16 +109,19 @@ class GestionnaireController extends Controller
     {
         
         $gestionnaire = Gestionnaire::findOrFail($id);
+        // dd($id);
          $validated = $request->validate([
         'nom' => 'sometimes|string|max:255',
         'prenom' => 'sometimes|string|max:255',
         'sexe' => 'sometimes|in:M,F', 
-        'email'=> "sometimes|email|unique:users,email,{$gestionnaire->id}",       
+        'email' => "sometimes|email|unique:users,email,{$gestionnaire->user_id}",
+      
     ]);
     // Mise à jour
     $gestionnaire->update($validated);
 
-    dd($validated["email"]);
+   dd($validated);
+
     if ($gestionnaire->user) {
             $gestionnaire->user->update([
                 'name' => ($validated['nom'] ?? $gestionnaire->nom) . ' ' . ($validated['prenom'] ?? $gestionnaire->prenom),
@@ -134,7 +147,7 @@ class GestionnaireController extends Controller
     $gestionnaire->delete();
     //return view("gestionniare.tableau");
 
-    return redirect()->back()->with('success', 'Employé supprimé avec succès.');
+    return redirect()->route('dashboard.index')->with('success', 'Employé supprimé avec succès.');
     }
     }
 

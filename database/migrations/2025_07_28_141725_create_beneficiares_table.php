@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('url_justificatif ');
             $table->string('type_beneficiaire')->default('enfant');
-            $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade');
+            $table->foreignId('assure_id')->constrained('assures')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

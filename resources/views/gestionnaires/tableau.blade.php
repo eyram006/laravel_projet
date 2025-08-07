@@ -29,7 +29,10 @@
                 <h4 class="mb-0">🧑‍💼 Liste des gestionnaires</h4>
                 <small class="text-muted">Gérer les informations des gestionnaires</small>
             </div>
-            <a href="#" class="btn btn-sm btn-outline-primary rounded-pill" title="ajouter"
+           <!-- resources/views/gestionnaires/tableau.blade.php -->
+
+<!-- Bouton pour ouvrir le modal -->
+ <a href="#" class="btn btn-sm btn-outline-primary rounded-pill" title="ajouter"
    data-bs-toggle="modal" data-bs-target="#createGestionnaireModal">
    <i class="ri-user-add-line"></i>
    Ajouter
@@ -66,6 +69,12 @@
                     </div>
 
                     <div class="mb-4">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control form-control-lg" name="email"
+                            id="email_create" placeholder="Entrer l'email"
+                            value="{{ old('email') }}" required>
+                    </div>
+                    <div class="mb-4">
                         <label for="sexe" class="form-label">Sexe</label>
                         <select name="sexe" id="sexe" class="form-select form-select-lg" required>
                             <option value="">-- Sélectionnez --</option>
@@ -87,9 +96,9 @@
             </form>
         </div>
     </div>
-</div>
+</div> 
 
-        </div>
+        </div> 
 
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3 gap-3">

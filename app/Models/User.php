@@ -51,14 +51,14 @@ class User extends Authenticatable
 
    
 
-    public function entreprise()
+    public function client()
     {
-        return $this->hasOne(Entreprise::class);
+        return $this->hasOne(Client::class);
     }
 
-    public function employe()
+    public function assure()
     {
-        return $this->hasOne(Employe::class);
+        return $this->hasOne(Assure::class);
     }
 
     public function beneficiaires()

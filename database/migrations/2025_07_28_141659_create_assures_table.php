@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('contact')->unique();
             $table->string('addresse')->nullable();
-            $table->string('client_access_token');
+            $table->string('client_access_token')->nullable();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
             $table->string('statut')->default('en attente');
             $table->string('anciennete')->nullable();
             $table->dateTime('date_naissance')->nullable();
-            $table->foreign('client_access_token')->references('access_token')->on('clients')->onDelete('cascade');
+            $table->foreign('client_access_token')->references('access_token')->on('clients')->onDelete('cascade')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->boolean('is_principal');
+            $table->boolean('is_principal')->default(true);
             $table->timestamps();
         });
     }
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employes');
+        Schema::dropIfExists('assures');
     }
 };

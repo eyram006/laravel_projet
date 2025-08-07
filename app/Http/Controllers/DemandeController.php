@@ -12,7 +12,7 @@ class DemandeController extends Controller
      */
     public function index()
     {
-        $demandes = Demande::with('employe')->paginate();
+        $demandes = Demande::with('assure')->paginate();
         return view('demandes.tableau_demande',compact('demandes'));
     
     }

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EmployeController;
+use App\Http\Controllers\AssureController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\GestionnaireController;
 use App\Http\Controllers\ProfileController;
@@ -20,18 +20,18 @@ Route::middleware(["auth"])->prefix('/')->group(function () {
 
 
 // Route::middleware(['auth'])->group(function () {
-//                     employeController
-Route::get('/employes', [EmployeController::class, 'index'])->name('employes.index');
+//                     assureController
+Route::get('/assures', [AssureController::class, 'index'])->name('assures.index');
 
-Route::get('/employes/{id}/edit', [EmployeController::class, 'edit'])->name('employes.edit');
+Route::get('/assures/{id}/edit', [AssureController::class, 'edit'])->name('assures.edit');
 
-Route::put('/employes/{id}', [EmployeController::class, 'update'])->name('employes.update');
+Route::put('/assures/{id}', [AssureController::class, 'update'])->name('assures.update');
 
-Route::delete('/employes{id}/destroy', [EmployeController::class,'destroy'])->name('employes.destroy');
+Route::delete('/assures{id}/destroy', [AssureController::class,'destroy'])->name('assures.destroy');
 
-Route::get('/employes/create', [EmployeController::class, 'create'])->name('employes.create');
+Route::get('/assures/create', [AssureController::class, 'create'])->name('assures.create');
 
-Route::post('/employes', [EmployeController::class,'store'])->name('employes.store');
+Route::post('/assures', [AssureController::class,'store'])->name('assures.store');
 
    //});
                         //demandeController
@@ -62,6 +62,7 @@ Route::delete('/gestionnaires/{id}/destroy', [GestionnaireController::class,'des
 
 // Route::resource('gestionnaires',GestionnaireController::class);
 
+Route::get('assures-export', [AssureController::class, 'export'])->name('assures.export');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

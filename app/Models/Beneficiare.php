@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Beneficiare extends Model
 {
      use HasFactory;
-   protected $fillable = ['url_justificatif', 'employe_id', 'user_id'];
+   protected $fillable = ['url_justificatif', 'assure_id', 'user_id'];
 
-    public function employe()
+    public function assure()
     {
-        return $this->belongsTo(Employe::class);
+        return $this->belongsTo(Assure::class);
     }
 
     public function user()

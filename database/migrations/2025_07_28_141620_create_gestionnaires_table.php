@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('gestionnaires', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nom');
+           
             $table->string('prenom');
+            //  $table->string('email');
             $table->char('sexe', 1);
             $table->timestamps();
         });

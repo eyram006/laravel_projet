@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Entreprise;
+use App\Models\Assure;
 
-class EntrepriseSeeder extends Seeder
+class AssureSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-       Entreprise::factory()->count(2)->create();
+        Assure::factory()->count(10)->create();
     }
 }

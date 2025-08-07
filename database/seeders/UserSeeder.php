@@ -18,22 +18,49 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-         User::create([
-            "name"=> "laeti",
-            'email' => 'laeti@gmail.com',
-            'password' => Hash::make('laeti'),
-        ])->assignRole(RoleEnum::ADMIN->value);
+        //   $user2 = User::create([
+        //     'name' => 'Boba',
+        //     'email' => 'boba@gmail.com',
+        //     'password' => Hash::make('boba'),
 
-        User::create([
-             "name"=> "othy",
-            'email' => 'othy@gmail.com',
-            'password' => Hash::make('othy'),
-        ])->assignRole(RoleEnum::EMPLOYE->value);
+        // ]);
+        // $user2->assignRole(RoleEnum::ASSURE->value);
 
-        User::create([
-            "name"=> "yasmine",
-            'email' => 'yasmine@gmail.com',
-            'password' => Hash::make('yasmine'),
-        ])->assignRole(RoleEnum::GESTIONNAIRE->value);
+        // $user3 = User::create([
+
+        //     'name' => 'tal',
+        //     'email' => 'tal@gmail.com',
+        //     'password' => Hash::make('tal'),
+
+        // ]);
+        // $user3->assignRole(RoleEnum::GESTIONNAIRE->value);
+
+        // $user4 = User::create([
+
+        //     'name' => 'Didier',
+        //     'email' => 'didier@gmail.com',
+        //     'password' => Hash::make('didier'),
+
+        // ]);
+
+        // $user4->assignRole(RoleEnum::CLIENT->value);
+   
+   
+   $user1 = User::create([
+        'name' => 'lice',
+        'email' => 'lice@example.com',
+        'password' => Hash::make('lice'),
+
+    ]);
+
+    $user1->assignRole(RoleEnum::ADMIN->value);
+
+    $user2 = User::create([
+        'name'=> 'laeti',
+        'email'=> 'laeti@gmail.com',
+        'password'=> Hash::make('laeti'),
+]);
+$user2->assignRole(RoleEnum::GESTIONNAIRE->value);
+   
     }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('cartes', function (Blueprint $table) {
             $table->id();
-           // $table->unsignedInteger('employe_id');
-            $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade');
+           // $table->unsignedInteger('assure_id');
+            $table->foreignId('assure_id')->constrained('assures')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -19,6 +19,15 @@ class Gestionnaire extends Model
         return $this->hasMany(Demande::class);
     }
 
+    protected static function boot()
+{
+    parent::boot(); 
+
+    static::deleting(function ($gestionnaire) {
+        $gestionnaire->user?->delete(); 
+    });
+}
+
     public function user()
     {
         return $this->belongsTo(User::class);

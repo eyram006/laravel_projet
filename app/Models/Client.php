@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Http\Enums\StatutEnum;
 class Client extends Model
 {
     use HasFactory;
@@ -36,20 +37,20 @@ class Client extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function employes()
+    public function assures()
     {
-        return $this->hasMany(Employe::class, 'entreprise_id');
+        return $this->hasMany(Assure::class, 'client_id');
     }
 
-    // public function employesViaToken()
+    // public function assuresViaToken()
     // {
-    //     return $this->hasMany(Employe::class, 'entreprise_token_public', 'token_public');
+    //     return $this->hasMany(Assure::class, 'client_token_public', 'token_public');
     // }
 
-    // Contrainte métier : peut avoir un seul employé principal
-    // public function employePrincipal()
+    // Contrainte métier : peut avoir un seul assuré principal
+    // public function assurePrincipal()
     // {
-    //     return $this->hasOne(Employe::class)->where('is_principal', true);
+    //     return $this->hasOne(Assure::class)->where('is_principal', true);
     // }
 }
 

@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Carte extends Model
 {
      use HasFactory;
-   protected $fillable = ['employe_id'];
+   protected $fillable = ['assure_id'];
 
-   public function employe()
+   public function assure()
 {
-    return $this->belongsTo('App\Models\Employe');
+    return $this->belongsTo('App\Models\Assure');
 } 
 }
 

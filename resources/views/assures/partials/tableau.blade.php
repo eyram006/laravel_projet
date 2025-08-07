@@ -4,32 +4,36 @@
          <div class="card shadow rounded-4 border-0">
              <div class="card-header bg-white d-flex justify-content-between align-items-center rounded-top-4">
                  <div>
-                     <h4 class="mb-0">👨‍💼 Liste des employés</h4>
-                     <small class="text-muted">Gérer les informations des employés</small>
+                     <h4 class="mb-0">👨‍💼 Liste des assurés</h4>
+                     <small class="text-muted">Gérer les assurés</small>
                  </div>
 
-                 {{-- <a href="{{ route('employes.create') }}"
+                 {{-- <a href="{{ route('assures.create') }}"
                      class="btn btn-primary d-flex align-items-center gap-2 rounded-pill shadow-sm px-4 py-2">
                      <i class="ri-user-add-line"></i>
                      Ajouter
                  </a> --}}
+                 <a class="btn btn-primary" href="{{ route('assures.export') }}">
+                    <i class="ri-file-download-line"></i>
+                     Télécharger le modèle
+                 </a>
 
                  <a href="#" class="btn btn-sm btn-outline-primary rounded-pill" title="ajouter"
-                     data-bs-toggle="modal" data-bs-target="#createEmployeModal">
+                     data-bs-toggle="modal" data-bs-target="#createAssureModal">
                      <i class="ri-user-add-line"></i>
                      Ajouter
                  </a>
 
-                 <div class="modal fade" id="createEmployeModal" tabindex="-1"
-                     aria-labelledby="createEmployeModalLabel" aria-hidden="true">
+                 <div class="modal fade" id="createAssureModal" tabindex="-1" aria-labelledby="createAssureModalLabel"
+                     aria-hidden="true">
                      <div class="modal-dialog">
                          <div class="modal-content">
-                             <form method="POST" action="{{ route('employes.store') }}">
+                             <form method="POST" action="{{ route('assures.store') }}">
                                  @csrf
 
                                  <div class="modal-header">
-                                     <h5 class="modal-title" id="createEmployeModalLabel">
-                                         creer un nouvel employé</h5>
+                                     <h5 class="modal-title" id="createAssureModalLabel">
+                                         creer un nouvel assuré</h5>
                                      <button type="button" class="btn-close" data-bs-dismiss="modal"
                                          aria-label="Close"></button>
                                  </div>
@@ -82,15 +86,15 @@
                                              placeholder="Entrer la ville de residence" value="{{ old('addresse') }}">
                                      </div>
                                      <div class="mb-4">
-                                         <label for="entreprise_id" class="form-label">Entreprise</label>
-                                         <select name="entreprise_id" id="entreprise_id"
-                                             class="form-select form-select-lg" required>
-                                             <option value="">-- Sélectionnez l'entreprise correspondante--
+                                         <label for="client_id" class="form-label">Client</label>
+                                         <select name="client_id" id="client_id" class="form-select form-select-lg"
+                                             required>
+                                             <option value="">-- Sélectionnez le client correspondant--
                                              </option>
-                                             @foreach ($entreprises as $entreprise)
-                                                 <option value="{{ $entreprise->id }}"
-                                                     {{ old('entreprise_id') == $entreprise->id ? 'selected' : '' }}>
-                                                     {{ $entreprise->raison_social }}
+                                             @foreach ($clients as $client)
+                                                 <option value="{{ $client->id }}"
+                                                     {{ old('client_id') == $client->id ? 'selected' : '' }}>
+                                                     {{ $client->raison_social }}
                                                  </option>
                                              @endforeach
                                          </select>
@@ -143,38 +147,37 @@
                          </tr>
                      </thead>
                      <tbody>
-                         @forelse ($employes as $employe)
+                         @forelse ($assures as $assure)
                              <tr>
-                                 <td>{{ $employe->nom }}</td>
-                                 <td>{{ $employe->prenoms }}</td>
-                                 <td>{{ $employe->email }}</td>
-                                 <td>{{ $employe->entreprise->raison_social ?? 'Non assigné' }}</td>
+                                 <td>{{ $assure->nom }}</td>
+                                 <td>{{ $assure->prenoms }}</td>
+                                 <td>{{ $assure->email }}</td>
+                                 <td>{{ $assure->client->raison_social ?? 'Non assigné' }}</td>
                                  {{-- <td><span class="badge bg-success">Actif</span></td> --}}
                                  <td>
                                      <div class="d-flex justify-content-center gap-3">
                                          <a href="#" {{-- < type="button"    --}}
                                              class="btn btn-sm btn-outline-primary rounded-pill" title="Modifier"
                                              data-bs-toggle="modal"
-                                             data-bs-target="#editEmployeModal{{ $employe->id }}">
+                                             data-bs-target="#editAssureModal{{ $assure->id }}">
                                              <i class="ri-pencil-line"></i>
                                          </a>
                                          {{-- formulaire edit --}}
 
-                                         <div class="modal fade" id="editEmployeModal{{ $employe->id }}"
-                                             tabindex="-1"
-                                             aria-labelledby="editEmployeModalLabel{{ $employe->id }}"
+                                         <div class="modal fade" id="editAssureModal{{ $assure->id }}"
+                                             tabindex="-1" aria-labelledby="editAssureModalLabel{{ $assure->id }}"
                                              aria-hidden="true">
                                              <div class="modal-dialog">
                                                  <div class="modal-content">
                                                      <form method="POST"
-                                                         action="{{ route('employes.update', $employe->id) }}">
+                                                         action="{{ route('assures.update', $assure->id) }}">
                                                          @csrf
                                                          @method('PUT')
 
                                                          <div class="modal-header">
                                                              <h5 class="modal-title"
-                                                                 id="editEmployeModalLabel{{ $employe->id }}">
-                                                                 Modifier l'employé</h5>
+                                                                 id="editAssureModalLabel{{ $assure->id }}">
+                                                                 Modifier l'assuré</h5>
                                                              <button type="button" class="btn-close"
                                                                  data-bs-dismiss="modal" aria-label="Close"></button>
                                                          </div>
@@ -196,7 +199,7 @@
                                                                      class="form-control form-control-lg"
                                                                      name="nom" id="nom"
                                                                      placeholder="Entrer le nom"
-                                                                     value="{{ old('nom', $employe->nom) }}">
+                                                                     value="{{ old('nom', $assure->nom) }}">
                                                              </div>
 
                                                              <div class="mb-4">
@@ -206,7 +209,7 @@
                                                                      class="form-control form-control-lg"
                                                                      name="prenoms" id="prenoms"
                                                                      placeholder="Entrer les prénoms"
-                                                                     value="{{ old('prenoms', $employe->prenoms) }}">
+                                                                     value="{{ old('prenoms', $assure->prenoms) }}">
                                                              </div>
 
                                                              <div class="mb-4">
@@ -216,7 +219,7 @@
                                                                      class="form-control form-control-lg"
                                                                      name="email" id="email"
                                                                      placeholder="Entrer l'email"
-                                                                     value="{{ old('email', $employe->email) }}">
+                                                                     value="{{ old('email', $assure->email) }}">
                                                              </div>
 
                                                              <div class="mb-4">
@@ -224,10 +227,10 @@
                                                                  <select name="sexe" id="sexe"
                                                                      class="form-control form-control-lg" required>
                                                                      <option value="M"
-                                                                         {{ old('sexe', $employe->sexe) === 'M' ? 'selected' : '' }}>
+                                                                         {{ old('sexe', $assure->sexe) === 'M' ? 'selected' : '' }}>
                                                                          Masculin</option>
                                                                      <option value="F"
-                                                                         {{ old('sexe', $employe->sexe) === 'F' ? 'selected' : '' }}>
+                                                                         {{ old('sexe', $assure->sexe) === 'F' ? 'selected' : '' }}>
                                                                          Féminin</option>
                                                                  </select>
                                                              </div>
@@ -239,7 +242,7 @@
                                                                      id="contact_edit"
                                                                      class="form-control form-control-lg"
                                                                      placeholder="Entrer le contact"
-                                                                     value="{{ old('contact', $employe->contact) }}">
+                                                                     value="{{ old('contact', $assure->contact) }}">
                                                              </div>
                                                              <div class="mb-4">
                                                                  <label for="addresse"
@@ -248,20 +251,20 @@
                                                                      id="addresse_edit"
                                                                      class="form-control form-control-lg"
                                                                      placeholder="Entrer la ville"
-                                                                     value="{{ old('addresse', $employe->addresse) }}">
+                                                                     value="{{ old('addresse', $assure->addresse) }}">
                                                              </div>
 
                                                              <div class="mb-4">
-                                                                 <label for="entreprise_id"
-                                                                     class="form-label">Entreprise</label>
-                                                                 <select name="entreprise_id" id="entreprise_id"
+                                                                 <label for="client_id"
+                                                                     class="form-label">Client</label>
+                                                                 <select name="client_id" id="client_id"
                                                                      class="form-select form-select-lg" required>
-                                                                     <option value=""> Sélectionnez l'entreprise
+                                                                     <option value=""> Sélectionnez le client
                                                                          --</option>
-                                                                     @foreach ($entreprises as $entreprise)
-                                                                         <option value="{{ $entreprise->id }}"
-                                                                             {{ old('entreprise_id', $employe->entreprise_id ?? '') == $entreprise->id ? 'selected' : '' }}>
-                                                                             {{ $entreprise->raison_social }}
+                                                                     @foreach ($clients as $client)
+                                                                         <option value="{{ $client->id }}"
+                                                                             {{ old('client_id', $assure->client_id ?? '') == $client->id ? 'selected' : '' }}>
+                                                                             {{ $client->raison_social }}
                                                                          </option>
                                                                      @endforeach
                                                                  </select>
@@ -271,7 +274,7 @@
                                                                  <input type="checkbox" name="is_principal"
                                                                      id="is_principal_edit" class="form-check-input"
                                                                      value="1"
-                                                                     {{ old('is_principal', $employe->is_principal) ? 'checked' : '' }}>
+                                                                     {{ old('is_principal', $assure->is_principal) ? 'checked' : '' }}>
                                                                  <label for="is_principal_edit"
                                                                      class="form-check-label">assure principal</label>
                                                              </div>
@@ -295,7 +298,7 @@
                                      {{-- suppression --}}
 
 
-                                     <form action="{{ route('employes.destroy', $employe->id) }}" method="POST"
+                                     <form action="{{ route('assures.destroy', $assure->id) }}" method="POST"
                                          onsubmit="return confirm('Confirmer la suppression ?');">
                                          @csrf
                                          @method('DELETE')
@@ -310,7 +313,7 @@
              </tr>
          @empty
              <tr>
-                 <td colspan="5" class="text-muted">Aucun employé trouvé.</td>
+                 <td colspan="5" class="text-muted">Aucun assuré trouvé.</td>
              </tr>
              @endforelse
              </tbody>
@@ -318,7 +321,7 @@
          </div>
 
          <div class="mt-3 d-flex justify-content-center">
-             {{ $employes->links() }}
+             {{ $assures->links() }}
          </div>
      </div>
      </div>

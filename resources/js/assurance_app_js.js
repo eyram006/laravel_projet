@@ -12,8 +12,8 @@ const roles = {
         name: 'Gestionnaire',
         permissions: ['manage_assures', 'manage_claims', 'manage_policies', 'view_logs']
     },
-    'employe': {
-        name: 'Employé',
+    'assure': {
+        name: 'Assuré',
         permissions: ['manage_assures', 'manage_claims']
     },
     
@@ -198,7 +198,7 @@ function showView(view) {
         case 'dashboard':
             contentArea.innerHTML = getDashboardContent();
             break;
-        case 'employes':
+        case 'assures':
             contentArea.innerHTML = getAssuresContent();
             break;
         case 'demandes':

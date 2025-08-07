@@ -21,7 +21,7 @@ class ClientFactory extends Factory
     {
         return [
             'nom' => $this->faker->company,
-            'raison_social' => $this->faker->unique()->companySuffix,
+            'raison_social' => $this->faker->unique()->company(),
             'address' => $this->faker->city,
             'user_id' => User::inRandomOrder()->value('id'), 
             'access_token' => Str::random(5), // ou utiliser Str::uuid() si tu préfères un format UUID

@@ -16,12 +16,13 @@ class GestionnaireFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
+    { $user = User::inRandomOrder()->first();
         return [
              'nom' => $this->faker->lastName,
             'prenom' => $this->faker->firstName,
+            // 'email' =>$user->email,
             'sexe' => $this->faker->randomElement(['M', 'F']),
-            'user_id' => User::inRandomOrder()->first()?->id ,
+            'user_id' =>$user->id,
        
            
         ];

@@ -9,19 +9,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Demande extends Model
 {
    use HasFactory;
-    protected $fillable = ['reponses', 'employe_id','statut'];
+    protected $fillable = ['reponses', 'assure_id','statut'];
 
     protected $casts = [
         'reponses' => 'array',
         'statut' => StatutEnum::class,
     ];
 
-    public function Employe()
+    public function assure()
     {
-        return $this->belongsTo(Employe::class);
+        return $this->belongsTo(Assure::class);
     }
 
-    public function Gestionnaire()
+    public function gestionnaire()
     {
         return $this->belongsTo(Gestionnaire::class);
     }

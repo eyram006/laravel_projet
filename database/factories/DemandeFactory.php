@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Demande;
-use App\Models\Employe;
+use App\Models\Assure;
 use App\Models\Gestionnaire;
 use Illuminate\Support\Arr;
 use App\Http\Enums\StatutEnum;
@@ -31,7 +31,7 @@ class DemandeFactory extends Factory
                 'question3' => $this->faker->sentence,
             ],
             'statut' => Arr::random(StatutEnum::cases()),
-            'employe_id' => Employe::inRandomOrder()->first()?->id  , 
+            'assure_id' => Assure::inRandomOrder()->first()?->id  , 
             'gestionnaire_id' => Gestionnaire::inRandomOrder()->first()?->id
        
         ];
