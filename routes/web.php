@@ -33,7 +33,7 @@ Route::get('/assures/create', [AssureController::class, 'create'])->name('assure
 
 Route::post('/assures', [AssureController::class,'store'])->name('assures.store');
 
-   //});
+  //});
                         //demandeController
 Route::get('/demandes', [DemandeController::class, 'index'])->name('demandes.index'); 
 
@@ -63,6 +63,13 @@ Route::delete('/gestionnaires/{id}/destroy', [GestionnaireController::class,'des
 // Route::resource('gestionnaires',GestionnaireController::class);
 
 Route::get('assures-export', [AssureController::class, 'export'])->name('assures.export');
+Route::post('/assures/import', [AssureController::class, 'import'])->name('assures.import');
+Route::get('/assures/import', [AssureController::class, 'showImport'])->name('assures.import.show');
+
+Route::get('/form',function(){
+    return view('formulaire');
+});
+
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

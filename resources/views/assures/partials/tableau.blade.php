@@ -1,4 +1,61 @@
  <body class="bg-light">
+    <style>
+.modal-header.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.upload-zone {
+    border: 2px dashed #dee2e6;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.upload-zone:hover {
+    border-color: #667eea;
+    background: #f0f4ff;
+}
+
+.upload-zone.dragover {
+    border-color: #667eea;
+    background: #e3f2fd;
+    transform: scale(1.02);
+}
+
+.file-info {
+    background: #e8f5e8;
+    border: 1px solid #c3e6c3;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+}
+
+.instructions {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 0.375rem;
+    padding: 1rem;
+}
+
+.btn-import {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    transition: transform 0.2s ease;
+}
+
+.btn-import:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.error-list {
+    max-height: 150px;
+    overflow-y: auto;
+    font-size: 0.9em;
+}
+</style>
 
      <div class="container-fluid py-4">
          <div class="card shadow rounded-4 border-0">
@@ -17,6 +74,73 @@
                     <i class="ri-file-download-line"></i>
                      Télécharger le modèle
                  </a>
+
+                 {{-- resources/views/assures/partials/import-modal.blade.php --}}
+
+<!-- Bouton pour déclencher le modal -->
+
+{{-- Modal Import Assurés - À inclure dans votre vue principale --}}
+
+<!-- Bouton pour déclencher le modal -->
+
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importAssuresModal">
+    <i class="ri-upload-2-line"></i> Importer Assurés
+</button>
+
+<div class="modal fade" id="importAssuresModal" tabindex="-1" aria-labelledby="importAssuresLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ route('assures.import') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title" id="importAssuresLabel">Importer un fichier Excel</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+
+        <div class="modal-body">
+          <p class="text-muted small">
+            Sélectionnez un fichier Excel contenant les assurés à importer.<br>
+            <strong>Colonnes attendues :</strong> Nom, Prénoms, Sexe, Email, Contact, Adresse, Date de Naissance, Ancienneté, Statut.
+          </p>
+
+          <div class="mb-3">
+            <label for="fichier" class="form-label">Fichier Excel (.xlsx, .xls, .csv)</label>
+            <input type="file" name="fichier" id="fichier" class="form-control" accept=".xlsx,.xls,.csv" required>
+         <input type="hidden" name="client_id" value="{{ auth()->user()->id ?? '' }}">
+        </div>
+
+
+          @if(session('details_erreurs'))
+            <div class="alert alert-warning mt-3">
+              <h6 class="mb-2">Erreurs rencontrées :</h6>
+              <ul class="mb-0">
+                @foreach(session('details_erreurs') as $err)
+                  <li>Ligne {{ $err['ligne'] }} : {{ implode(', ', $err['erreurs']) }}</li>
+                @endforeach
+              </ul>
+            </div>
+          @endif
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="ri-upload-cloud-line"></i> Importer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+                 {{-- @include('assures.partials.import-modal')
+                  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+                  <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new ImportModal();
+        });
+    </script> --}}
 
                  <a href="#" class="btn btn-sm btn-outline-primary rounded-pill" title="ajouter"
                      data-bs-toggle="modal" data-bs-target="#createAssureModal">
@@ -132,7 +256,6 @@
                          placeholder="Rechercher par nom...">
                  </form>
              </div>
-
 
              <div class="table-responsive">
                  <table class="table table-hover align-middle text-center">
@@ -330,4 +453,5 @@
      <!-- Bootstrap JS -->
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+      
  </body>

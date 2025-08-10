@@ -39,3 +39,4 @@ class AssureFactory extends Factory
         ];
     }
 }
+   

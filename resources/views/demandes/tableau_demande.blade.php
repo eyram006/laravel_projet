@@ -33,8 +33,8 @@
     <table class="table table-hover align-middle text-center">
         <thead class="table-light text-capitalize">
             <tr>
-                <th>Nom de l'assuré</th>
-                <th>Prénom de l'assuré</th>
+                <th>Nom</th>
+                <th>Prénom</th>
                 <th>Statut</th>
                 <th>Actions</th>
             </tr>

@@ -9,7 +9,7 @@
     <title>Dashboard - AssuranceApp</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+{{-- <link href="css/import-modal.css" rel="stylesheet"> --}}
     <!-- Remix Icon -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
@@ -79,17 +79,17 @@
 
             {{-- tableau assure --}}
 
-            @role('gestionnaire')
+            @hasanyrole('gestionnaire|client')
                 <div class="menu-section">Gestion</div>
                 <a href="#" class="menu-item" @click.prevent="fetchContent('{{ route('assures.index') }}')" >
                     {{-- <a href="{{ route('assures.index') }}" class="menu-item" onclick="showView('assures')" data-permission="manage_assures"> --}}
                     <i class="fas fa-users"></i>
                     <span>Gestion des assurés </span>
                 </a>
-               @endrole
+              @endhasanyrole
 
                     {{-- tableau demandes --}}
-             @hasanyrole('assure|gestionnaire')
+             @hasanyrole('assure|client')
             <a href="#" class="menu-item" @click.prevent="fetchContent('{{ route('demandes.index') }}')" >
                 <i class="fas fa-file-alt"></i>
                 <span>Gestion des demandes </span>
