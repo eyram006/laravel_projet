@@ -46,21 +46,21 @@ class UserSeeder extends Seeder
         // $user4->assignRole(RoleEnum::CLIENT->value);
    
    
-//    $user1 = User::create([
-//         'name' => 'lice',
-//         'email' => 'lice@example.com',
-//         'password' => Hash::make('lice'),
+   $user1 = User::create([
+        'name' => 'lice',
+        'email' => 'lice@example.com',
+        'password' => Hash::make('lice'),
 
-//     ]);
+    ]);
 
-//     $user1->assignRole(RoleEnum::ADMIN->value);
+    $user1->assignRole(RoleEnum::ADMIN->value);
 
-//     $user2 = User::create([
-//         'name'=> 'laeti',
-//         'email'=> 'laeti@gmail.com',
-//         'password'=> Hash::make('laeti'),
-// ]);
-// $user2->assignRole(RoleEnum::GESTIONNAIRE->value);
+    $user2 = User::create([
+        'name'=> 'laeti',
+        'email'=> 'laeti@gmail.com',
+        'password'=> Hash::make('laeti'),
+]);
+$user2->assignRole(RoleEnum::GESTIONNAIRE->value);
 
 $user3 = User::create([
     'name'=> 'othy',

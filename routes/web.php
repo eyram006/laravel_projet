@@ -5,7 +5,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AssureController;
 use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\GestionnaireController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -13,9 +12,13 @@ Route::redirect('/', '/dashboard')->name('dashboard');
 
 Route::get('/', [AuthController::class, 'index']);
 
-Route::middleware(["auth"])->prefix('/')->group(function () {
+Route::middleware(["auth"])->group(function () {
     Route::resources(['dashboard' => DashboardController::class,]);
-})->name('dashboard');
+
+    // Logs et paramètres (pages Blade dédiées)
+    Route::get('/logs', fn () => view('logs.index'))->name('logs.index')->middleware('role:admin');
+    Route::get('/settings', fn () => view('settings.index'))->name('settings.index');
+});
 
 
 
@@ -41,7 +44,7 @@ Route::get('/demandes/{id}/edit', [DemandeController::class, 'edit'])->name('dem
 
 Route::put('/demandes/{id}/update', [DemandeController::class, 'update'])->name('demandes.update');
 
-Route::get('/demandes/{id}/show', [DemandeController::class, 'show'])->name('demandes.show');
+//Route::get('/demandes/{id}/show', [DemandeController::class, 'show'])->name('demandes.show');
 
 
 
@@ -62,14 +65,17 @@ Route::delete('/gestionnaires/{id}/destroy', [GestionnaireController::class,'des
 
 // Route::resource('gestionnaires',GestionnaireController::class);
 
+Route::post('', [DemandeController::class, 'store'])->name('demandes.store');
+
 Route::get('assures-export', [AssureController::class, 'export'])->name('assures.export');
-Route::post('/assures/import', [AssureController::class, 'import'])->name('assures.import');
-Route::get('/assures/import', [AssureController::class, 'showImport'])->name('assures.import.show');
+Route::post('assures-import', [AssureController::class, 'import'])->name('assures.import');
+Route::get('/import', [AssureController::class, 'showImport'])->name('assures.import.show');
 
 Route::get('/form',function(){
     return view('formulaire');
-});
+})->name('formulaire_demande');
 
+ Route::get('/{demande}', [DemandeController::class, 'show'])->name('demandes.show');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

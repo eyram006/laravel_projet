@@ -14,7 +14,10 @@ use App\Imports\AssuresImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Storage;
 
 
 /**
@@ -24,104 +27,126 @@ use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 class AssureController extends Controller
 {
 
-public function import(Request $request)
+public function import(Request $request) 
     {
         $request->validate([
-            'fichier' => 'required|file|mimes:xlsx,xls,csv|max:10240',
-            'client_id' => 'required|exists:clients,id',
+            'fichier' => 'required|file|mimes:xlsx,xls,csv|max:10240',    
+        ]);
+       $userId = Auth::id();
+
+    // Recherche du client lié à cet utilisateur
+    $client = Client::where('user_id', $userId)->firstOrFail();
+     $clientAccessToken = $client->access_token;
+
+    // On a maintenant le client_id
+    $clientId = $client->id;
+        $file = $request->file('fichier');
+        $client = Client::findOrFail($client->$clientId);
+     $entrepriseName = preg_replace('/\s+/', '_', strtolower($client->nom));
+
+    // Fichier uploadé
+    $file = $request->file('fichier');
+    $extension = $file->getClientOriginalExtension();
+
+    // Nom unique : nom entreprise + clientId + time + uniqid
+    $fileName = $entrepriseName . '_client_' . $clientId . '_' . time() . '_' . uniqid() . '.' . $extension;
+
+    // Sauvegarde temporaire
+    $tempPath = $file->storeAs('tmp', $fileName);
+$fullPath = storage_path('app/' . $tempPath);
+    
+$spreadsheet = IOFactory::load($fullPath);
+    $worksheet = $spreadsheet->getActiveSheet();
+    $data = $worksheet->toArray();
+
+    
+    if (empty($data)) {
+        return back()->with('error', 'Le fichier est vide.');
+    }
+
+    // Normaliser et vérifier les entêtes
+    $headers = $this->normalizeHeaders(array_shift($data));
+    $requiredColumns = ['nom', 'prenoms', 'sexe', 'email', 'contact', 'addresse', 'date_de_naissance', 'anciennete', 'statut'];
+    $missingColumns = array_diff($requiredColumns, $headers);
+
+    if (!empty($missingColumns)) {
+        return back()->with('error', 'Colonnes manquantes: ' . implode(', ', $missingColumns));
+    }
+
+
+    $results = [
+        'total_lignes' => count($data),
+        'ajoutes' => 0,
+        'ignores' => 0,
+        'erreurs' => []
+    ];
+
+    
+
+    foreach ($data as $index => $row) {
+        $lineNumber = $index + 2; // Ligne réelle dans le fichier
+
+        $rowData = array_combine($headers, $row);
+        $validationResult = $this->cleanAndValidateData($rowData);
+
+        if (!empty($validationResult['errors'])) {
+            $results['erreurs'][] = [
+                'ligne' => $lineNumber,
+                'erreurs' => $validationResult['errors'],
+            ];
+            $results['ignores']++;
+            continue;
+        }
+
+        $cleanedData = $validationResult['data'];
+
+        // Vérifier doublon
+        $exists = Assure::where('email', $cleanedData['email'])
+            ->where('client_id', $clientId)
+            ->exists();
+
+        if ($exists) {
+            $results['ignores']++;
+            continue;
+        }
+
+        // Créer User
+        $plainPassword = Str::random(10);
+        $user = User::create([
+            'name' => $cleanedData['nom'] . ' ' . $cleanedData['prenoms'],
+            'email' => $cleanedData['email'],
+            'password' => Hash::make($plainPassword),
+        ]);
+        $user->assignRole('assure');
+
+        // Créer Assure
+        Assure::create([
+            'nom' => $cleanedData['nom'],
+            'prenoms' => $cleanedData['prenoms'],
+            'sexe' => $cleanedData['sexe'],
+            'email' => $cleanedData['email'],
+            'contact' => $cleanedData['contact'] ?? null,
+            'addresse' => $cleanedData['addresse'] ?? null,
+            'date_naissance' => $cleanedData['date_de_naissance'],
+            'anciennete' => $cleanedData['anciennete'] ?? null,
+            'statut' => $cleanedData['statut'] ?? 'actif',
+            'user_id' => $user->id,
+            'client_id' => $clientId,
+            'client_access_token' => $clientAccessToken,
+            'is_principal' => true,
         ]);
 
-        $file = $request->file('fichier');
-        $clientId = $request->client_id;
-
-
-        // Charger le fichier avec PhpSpreadsheet
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->getPathname());
-        $worksheet = $spreadsheet->getActiveSheet();
-        $data = $worksheet->toArray();
-
-        if (empty($data)) {
-            return back()->with('error', 'Le fichier est vide.');
-        }
-
-        // Normaliser et vérifier les entêtes
-        $headers = $this->normalizeHeaders(array_shift($data));
-        $requiredColumns = ['nom', 'prenoms', 'sexe', 'email', 'contact', 'addresse', 'date_de_naissance', 'anciennete', 'statut'];
-        $missingColumns = array_diff($requiredColumns, $headers);
-
-        if (!empty($missingColumns)) {
-            return back()->with('error', 'Colonnes manquantes: ' . implode(', ', $missingColumns));
-        }
-
-        $results = [
-            'total_lignes' => count($data),
-            'ajoutes' => 0,
-            'ignores' => 0,
-            'erreurs' => []
-        ];
-
-        foreach ($data as $index => $row) {
-            $lineNumber = $index + 2; // +1 pour entête + base 1
-
-            // Associer les données aux headers
-            $rowData = array_combine($headers, $row);
-
-            // Nettoyer et valider
-            $validationResult = $this->cleanAndValidateData($rowData);
-
-            if (!empty($validationResult['errors'])) {
-                $results['erreurs'][] = [
-                    'ligne' => $lineNumber,
-                    'erreurs' => $validationResult['errors'],
-                ];
-                $results['ignores']++;
-                continue;
-            }
-
-            $cleanedData = $validationResult['data'];
-
-            // Vérifier doublon email + client_id
-            $exists = Assure::where('email', $cleanedData['email'])
-                ->where('client_id', $clientId)
-                ->exists();
-
-            if ($exists) {
-                $results['ignores']++;
-                continue;
-            }
-
-            // Créer User
-            $plainPassword = Str::random(10);
-            $user = User::create([
-                'name' => $cleanedData['nom'] . ' ' . $cleanedData['prenoms'],
-                'email' => $cleanedData['email'],
-                'password' => Hash::make($plainPassword),
-            ]);
-            $user->assignRole('assure');
-
-            // Créer Assure
-            Assure::create([
-                'nom' => $cleanedData['nom'],
-                'prenoms' => $cleanedData['prenoms'],
-                'sexe' => $cleanedData['sexe'],
-                'email' => $cleanedData['email'],
-                'contact' => $cleanedData['contact'] ?? null,
-                'addresse' => $cleanedData['addresse'] ?? null,
-                'date_naissance' => $cleanedData['date_de_naissance'],
-                'anciennete' => $cleanedData['anciennete'] ?? null,
-                'statut' => $cleanedData['statut'] ?? 'actif',
-                'user_id' => $user->id,
-                'client_id' => $clientId,
-                'is_principal' => true,
-            ]);
-
-            $results['ajoutes']++;
-            dd($results);
-        }
-
-        // Passer les résultats en session pour modal
-        return back()->with('import_results', $results);
+        $results['ajoutes']++;
     }
+
+    /** -------------------------------
+     *    SI TOUT OK → DÉPLACER
+     * ------------------------------*/
+    $finalPath = 'backups/' . $fileName;
+    Storage::move($tempPath, $finalPath);
+
+    return back()->with('import_results', $results);
+}
 
     /**
      * Normalise les entêtes (trim, minuscules, underscore)
@@ -248,7 +273,7 @@ public function import(Request $request)
     {
         $assures = Assure::orderBy('id')->paginate();
         $clients = Client::all();
-        return view('assures.partials.tableau', compact('assures', 'clients'));
+        return view('assures.index', compact('assures', 'clients'));
     }
 
     /**

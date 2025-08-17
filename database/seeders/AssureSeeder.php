@@ -13,6 +13,6 @@ class AssureSeeder extends Seeder
      */
     public function run(): void
     {
-        Assure::factory()->count(10)->create();
+        Assure::factory()->count(7)->create();
     }
 }

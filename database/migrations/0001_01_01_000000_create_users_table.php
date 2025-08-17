@@ -20,8 +20,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('contact')->nullable()->unique();
             $table->string('addresse')->nullable();
-
-            // Ajout des champs fusionnés depuis gestionnaires
             $table->string('nom')->nullable();
             $table->string('prenom')->nullable();
             $table->char('sexe', 1)->nullable();

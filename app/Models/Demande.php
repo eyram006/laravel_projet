@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Demande extends Model
 {
    use HasFactory;
-    protected $fillable = ['reponses', 'assure_id','statut'];
+    protected $fillable = ['reponses', 'assure_id','gestionnaire_id','statut'];
 
     protected $casts = [
         'reponses' => 'array',

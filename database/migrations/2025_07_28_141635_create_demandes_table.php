@@ -16,7 +16,7 @@ return new class extends Migration
             $table->json('reponses');
             $table->foreignId('assure_id')->constrained('assures')->onDelete('cascade');
             $table->string('statut')->default('en attente');
-            $table->foreignId('gestionnaire_id')->constrained('gestionnaires')->onDelete('cascade');
+            $table->foreignId('gestionnaire_id')->constrained('gestionnaires')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }
