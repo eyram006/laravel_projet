@@ -1,5 +1,5 @@
  <body class="bg-light">
-    <style>
+<style>
 .modal-header.bg-gradient {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
@@ -64,28 +64,23 @@
                      <h4 class="mb-0">👨‍💼 Liste des assurés</h4>
                      <small class="text-muted">Gérer les assurés</small>
                  </div>
-
-                 {{-- <a href="{{ route('assures.create') }}"
+                 <a href="{{ route('assures.create') }}"
                      class="btn btn-primary d-flex align-items-center gap-2 rounded-pill shadow-sm px-4 py-2">
                      <i class="ri-user-add-line"></i>
                      Ajouter
-                 </a> --}}
-                 <a class="btn btn-primary" href="{{ route('assures.export') }}">
-                    <i class="ri-file-download-line"></i>
-                     Télécharger le modèle
                  </a>
-
-                 {{-- resources/views/assures/partials/import-modal.blade.php --}}
-
-<!-- Bouton pour déclencher le modal -->
-
-{{-- Modal Import Assurés - À inclure dans votre vue principale --}}
-
-<!-- Bouton pour déclencher le modal -->
-
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importAssuresModal">
-    <i class="ri-upload-2-line"></i> Importer Assurés
-</button>
+                 <div class="d-flex gap-2">
+                     <a class="btn btn-primary" href="{{ route('assures.export') }}">
+                        <i class="ri-file-download-line"></i>
+                         Télécharger le modèle
+                     </a>
+                     
+                     <form action="{{ route('assures.import') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="fichier" />
+    <button type="submit">Importer</button>
+</form>
+                 </div>
 
 <div class="modal fade" id="importAssuresModal" tabindex="-1" aria-labelledby="importAssuresLabel" aria-hidden="true">
   <div class="modal-dialog">

@@ -1,4 +1,4 @@
-<!-- Modal Import -->
+{{-- <!-- Modal Import -->
 <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -96,4 +96,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}

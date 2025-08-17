@@ -89,7 +89,7 @@
               @endhasanyrole
 
                     {{-- tableau demandes --}}
-             @hasanyrole('assure|client')
+             @hasanyrole('gestionnaire|client')
             <a href="#" class="menu-item" @click.prevent="fetchContent('{{ route('demandes.index') }}')" >
                 <i class="fas fa-file-alt"></i>
                 <span>Gestion des demandes </span>
@@ -105,7 +105,7 @@
              @endrole --}}
                         {{-- tableau gestionnaires() --}}
             {{-- @role('admin') --}}
-             @hasanyrole('assure|gestionnaire')
+             @hasanyrole('client|gestionnaire')
             <a href="#" class="menu-item" @click.prevent="fetchContent('{{ route('gestionnaires.index') }}')" >
                 <i class="fas fa-user-tie"></i>
                 <span>Gestion des gestionnaires </span>

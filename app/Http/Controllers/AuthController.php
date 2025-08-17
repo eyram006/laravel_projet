@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -11,8 +12,19 @@ class AuthController extends Controller
      */
     public function index()
     {
-        if(auth()->check()){
-            return redirect()->route('dashboard.index');
+        if(Auth::check()){
+            return redirect()->route('dashboard');
+        }
+        return view('auth_page');
+    }
+
+    /**
+     * Affiche la page de connexion personnalisée
+     */
+    public function showLogin()
+    {
+        if(Auth::check()){
+            return redirect()->route('dashboard');
         }
         return view('auth_page');
     }

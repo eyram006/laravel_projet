@@ -20,7 +20,7 @@
 
             <div class="d-flex justify-content-end mb-3">
    <div class="d-flex justify-content-end mb-3">
-   <a href="/demandes/create" class="btn btn-success rounded-pill">
+   <a href="{{ route('formulaire_demande') }}" class="btn btn-success rounded-pill">
     <i class="ri-add-line"></i> Nouvelle demande
 </a>
 
