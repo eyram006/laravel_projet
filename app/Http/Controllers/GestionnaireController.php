@@ -19,8 +19,8 @@ class GestionnaireController extends Controller
      */
     public function index()
     {
-       $gestionnaires =Gestionnaire ::orderBy('id')->paginate();
-        return view('gestionnaires.tableau',compact('gestionnaires'));
+        $gestionnaires = Gestionnaire::orderBy('id')->paginate();
+        return view('gestionnaires.index', compact('gestionnaires'));
     }
 
     /**

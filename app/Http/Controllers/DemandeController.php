@@ -20,8 +20,7 @@ class DemandeController extends Controller
     public function index()
     {
         $demandes = Demande::with('assure')->paginate();
-        return view('demandes.tableau_demande',compact('demandes'));
-    
+        return view('demandes.index', compact('demandes'));
     }
 
     
@@ -97,8 +96,14 @@ class DemandeController extends Controller
             $donneesContact = $request->input('donnees_medicales.informations_sociodemographiques');
 
             
+
            $assure = auth()->user()->assure ?? Assure::create([
     'email' => auth()->user()->email,
+
+           $user = auth()->guard('web')->user(),
+           $assure = optional($user)->assure ?? Assure::create([
+    'email' => optional($user)->email,
+
     'nom' => $donneesPersonnelles['nom'],
                     'prenom' => $donneesPersonnelles['prenom'],
                     'date_naissance' => $donneesPersonnelles['date_naissance'],
@@ -107,7 +112,8 @@ class DemandeController extends Controller
                     'quartier' => $donneesContact['quartier'] ?? null,
                     'profession' => $donneesContact['profession'] ?? null,
                 ]
-            );
+           )
+           ]);
 
             // Préparation des données pour la colonne 'reponses'
             $reponses = $this->prepareReponsesData($request->input('donnees_medicales'));

@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+ /** * Run the migrations. */
     public function up(): void
     {
         Schema::create('assures', function (Blueprint $table) {
@@ -30,7 +28,6 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

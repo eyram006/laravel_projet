@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('cartes', function (Blueprint $table) {
             $table->id();
-           // $table->unsignedInteger('assure_id');
             $table->foreignId('assure_id')->constrained('assures')->onDelete('cascade');
             $table->timestamps();
         });
